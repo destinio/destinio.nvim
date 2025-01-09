@@ -26,6 +26,10 @@ M.rtps = function()
   vim.print(vim.inspect(vim.api.nvim_list_runtime_paths()))
 end
 
+M.nightly = function()
+  vim.print("nightly")
+end
+
 -- Terminal Stuff
 function M.right_terminal(opts)
   opts = opts or {}
