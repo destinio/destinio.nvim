@@ -1,7 +1,12 @@
 local M = {}
 
+M.go_to_github_link = function()
+  print(113)
+end
+
 M.setup = function()
   vim.keymap.set("n", "<Leader>tt", M.right_terminal, { desc = "right Terminal" })
+  vim.keymap.set("n", "<Leader>.gh", M.right_terminal, { desc = "Go to GitHub link" })
 
   -- User Commands
   vim.api.nvim_create_user_command("TermOpen", function()
