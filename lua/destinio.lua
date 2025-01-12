@@ -64,12 +64,12 @@ M.setup = function()
 
   -- Sauce
   vim.keymap.set("n", "<Leader>sx", function()
-    vim.print("Sauce")
+    vim.print("Sauce: File")
     vim.cmd("source %")
   end, { desc = "Sauce: file" })
 
-  vim.keymap.set("n", "<space>s.", ":.lua<CR>", { desc = "Sauce: lua line" })
-  vim.keymap.set("v", "<space>s.", ":lua<CR>", { desc = "Sauce: lua line" })
+  vim.keymap.set("n", "<space>s.", "<Cmd>.lua<CR>", { desc = "Sauce: lua line" })
+  vim.keymap.set("v", "<space>s.", "<Cmd>lua<CR>", { desc = "Sauce: lua line" })
 
   -- end keymaps ==============================
 
