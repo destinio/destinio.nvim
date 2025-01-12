@@ -1,5 +1,18 @@
 local M = {}
 
+M.rtps = function()
+  vim.print(vim.inspect(vim.api.nvim_list_runtime_paths()))
+end
+
+-- Terminal Stuff
+function M.right_terminal(opts)
+  opts = opts or {}
+
+  local width = math.floor(vim.o.columns * (opts.width or 0.4))
+
+  vim.cmd(width .. "vsplit | terminal")
+end
+
 local function validate_github_link(text)
   if text:find("/") and not text:find("%s") then
     return true
@@ -7,9 +20,9 @@ local function validate_github_link(text)
   return false
 end
 
-M.open_url_in_browser = function(text, og_text)
-  print("Visiting our friends at: " .. og_text)
-  os.execute(string.format("open %q", text)) -- macOS: 'open', Linux: 'xdg-open', Windows: 'start'
+M.open_url_in_browser = function(url)
+  os.execute(string.format("open %q", url)) -- TODO: support other macOS: 'open', Linux: 'xdg-open', Windows: 'start'
+  -- TODO: open in lynx
 end
 
 M.go_to_github_link = function()
@@ -24,7 +37,7 @@ M.go_to_github_link = function()
 
     if validate_github_link(text) then
       local fin_text = "https://github.com/" .. text
-      M.open_url_in_browser(fin_text, text)
+      M.open_url_in_browser(fin_text)
       return fin_text
     end
 
@@ -34,19 +47,38 @@ M.go_to_github_link = function()
 end
 
 M.setup = function()
+  -- Keymaps =====================
+
+  -- Terminal
   vim.keymap.set("n", "<Leader>tt", M.right_terminal, { desc = "right Terminal" })
+
+  -- browser stuff
   vim.keymap.set("n", "<Leader>gh", M.go_to_github_link, { desc = "Go Git[H]ub link" })
-  vim.keymap.set("n", "<Leader>xs", function()
+
+  vim.keymap.set("n", "<Leader>gs", function()
+    M.open_url_in_browser("https://www.google.com/webhp")
+  end, { desc = "Go [S]earch Google" })
+  vim.keymap.set("n", "<Leader>gc", function()
+    M.open_url_in_browser("https://chatgpt.com/")
+  end, { desc = "Go [C]hat GPT" })
+
+  -- Sauce
+  vim.keymap.set("n", "<Leader>sx", function()
     vim.print("Sauce")
     vim.cmd("source %")
-  end, { desc = "Sauce it" })
+  end, { desc = "Sauce: file" })
 
-  -- User Commands
+  vim.keymap.set("n", "<space>s.", ":.lua<CR>", { desc = "Sauce: lua line" })
+  vim.keymap.set("v", "<space>s.", ":lua<CR>", { desc = "Sauce: lua line" })
+
+  -- end keymaps ==============================
+
+  -- User Commands =========================
   vim.api.nvim_create_user_command("TermOpen", function()
     vim.cmd("split | terminal")
   end, {})
 
-  -- Autocommands
+  -- Autocommands ========================
   vim.api.nvim_create_autocmd("TermOpen", {
     callback = function()
       vim.wo.number = false -- Disable line numbers in terminal
@@ -54,27 +86,6 @@ M.setup = function()
       vim.cmd("startinsert") -- Start in insert mode
     end,
   })
-end
-
-M.say_hello = function()
-  vim.print("Hello from destinio.nvim")
-end
-
-M.rtps = function()
-  vim.print(vim.inspect(vim.api.nvim_list_runtime_paths()))
-end
-
-M.nightly = function()
-  vim.print("nightly")
-end
-
--- Terminal Stuff
-function M.right_terminal(opts)
-  opts = opts or {}
-
-  local width = math.floor(vim.o.columns * (opts.width or 0.4))
-
-  vim.cmd(width .. "vsplit | terminal")
 end
 
 return M
