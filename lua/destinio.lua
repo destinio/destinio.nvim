@@ -68,9 +68,6 @@ M.setup = function()
     vim.cmd("source %")
   end, { desc = "Sauce: file" })
 
-  vim.keymap.set("n", "<space>s.", "<Cmd>.lua<CR>", { desc = "Sauce: lua line" })
-  vim.keymap.set("v", "<space>s.", "<Cmd>lua<CR>", { desc = "Sauce: lua line" })
-
   -- end keymaps ==============================
 
   -- User Commands =========================
